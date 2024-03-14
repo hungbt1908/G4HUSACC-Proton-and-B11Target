@@ -13,9 +13,6 @@ SteppingAction::SteppingAction(const DetectorConstruction* detConstruction, Even
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {   
-    //
-    auto analysisManager = G4AnalysisManager::Instance();
-
     // scoring step in detector
     if(step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="physDetector")
     {

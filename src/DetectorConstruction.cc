@@ -1,4 +1,5 @@
 #include "DetectorConstruction.hh"
+#include "DetectorMessenger.hh"
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -14,14 +15,20 @@
 #include "G4PVPlacement.hh"
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
+#include "G4RunManager.hh"
 
 DetectorConstruction::DetectorConstruction()
     : G4VUserDetectorConstruction()
-{}
+{
+    fTargetAngleRotationMatrix = new G4RotationMatrix();
+    fTargetAngleRotationMatrix->rotateY(targetAngle);
+
+    fDetMessenger = new DetectorMessenger(this);
+}
 
 DetectorConstruction::~DetectorConstruction()
 {
-    //delete fDetectorMessenger;
+    delete fDetMessenger;
 }
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
@@ -85,21 +92,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolume()
 
     //
     DefineAttribute();
+    PrintInformation();
 
     return physWorld;
 }
 
 void DetectorConstruction::ConstructTarget()
 {
-    targetXYDim = 1.*cm;
-    targetZThick = 324.786*nm;
-    baseXYDim = 1.*cm;
-    baseZThick = 36.70*nm;
-    targetAngle = 0*deg;
     frameZThick = targetZThick + baseZThick;
     frameXYDim = targetXYDim;
     // frame = target + base layer
-    G4Box* solidTargetFrame = 
+    solidTargetFrame = 
         new G4Box("solidTargetFrame", 0.5*frameXYDim, 0.5*frameXYDim, 0.5*frameZThick);
     G4LogicalVolume* logicTargetFrame = 
         new G4LogicalVolume(solidTargetFrame, Vacuum, "logicTargetFrame");
@@ -107,19 +110,19 @@ void DetectorConstruction::ConstructTarget()
     rotm.rotateY(targetAngle);
     G4ThreeVector targetFramePos = G4ThreeVector(0,0,0);
     G4Transform3D targetFrameTrans = G4Transform3D(rotm, targetFramePos);
-    // physTargetFrame = 
+    physTargetFrame = 
         new G4PVPlacement(targetFrameTrans, logicTargetFrame, 
         "physTargetFrame", logicWorld, false, 0, checkOverlap);
     
     logicTargetFrame->SetVisAttributes(G4VisAttributes::GetInvisible());
 
     // target
-    G4Box* solidTarget =  
+    solidTarget =  
         new G4Box("Target", 0.5*targetXYDim, 0.5*targetXYDim, 0.5*targetZThick);
     G4LogicalVolume* logicTarget =
         new G4LogicalVolume(solidTarget, B11, "Target");
     G4double targetZPos = (-0.5*frameZThick + 0.5*targetZThick);
-    // physTarget =
+    physTarget =
         new G4PVPlacement(0, G4ThreeVector(0, 0, targetZPos), 
         logicTarget, "physTarget", logicTargetFrame, false, 0, checkOverlap);
     //
@@ -129,12 +132,12 @@ void DetectorConstruction::ConstructTarget()
     logicTarget->SetVisAttributes(targetAtt);
 
     // base
-    G4Box* solidBackLayer = 
+    solidBackLayer = 
         new G4Box("solidBackLayer", 0.5*baseXYDim,  0.5*baseXYDim, 0.5*baseZThick);
     G4LogicalVolume* logicBackLayer =
         new G4LogicalVolume(solidBackLayer, C3H6O2, "logicBackLayer");
     G4double backLayerZPos = 0.5*frameZThick - 0.5*baseZThick;
-    // physBackLayer = 
+    physBackLayer = 
         new G4PVPlacement(0, G4ThreeVector(0, 0, backLayerZPos), 
         logicBackLayer, "physBackLayer",  logicTargetFrame, false, 0, checkOverlap);
     //
@@ -181,3 +184,58 @@ void DetectorConstruction::ConstructDetector()
 
 void DetectorConstruction::PrintInformation()
 {}
+
+void DetectorConstruction::SetTargetAngle(G4double val)
+{
+    targetAngle = val;
+}
+
+G4double DetectorConstruction::GetTargetAngle()
+{
+    return targetAngle;
+}
+
+void DetectorConstruction::SetTargetXYDim(G4double val)
+{
+    targetXYDim = val;
+}
+
+G4double DetectorConstruction::GetTargetXYDim()
+{
+    return targetXYDim;
+}
+
+void DetectorConstruction::SetTargetThickness(G4double val)
+{
+    targetZThick = val;
+}
+
+G4double DetectorConstruction::GetTargetThickness()
+{
+    return targetZThick;
+}
+
+void DetectorConstruction::SetBaseXYDim(G4double val)
+{
+    baseXYDim = val;
+}
+
+G4double DetectorConstruction::GetBaseXYDim()
+{
+    return baseXYDim;
+}
+
+void DetectorConstruction::SetBaseThickness(G4double val)
+{
+    baseZThick = val;
+}
+
+G4double DetectorConstruction::GetBaseThickness()
+{
+    return baseZThick;
+}
+
+void DetectorConstruction::SetDetAngle(int detID, G4double angle)
+{
+	thetaMat[detID] = angle;
+}

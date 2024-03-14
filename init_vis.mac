@@ -4,6 +4,19 @@
 #
 /run/numberOfThreads 4
 
+# Geometry Setups
+/HUS/Geometry/Target/SetTargetXYDim    1. cm
+/HUS/Geometry/Target/SetTargetZThick   324.786 nm
+/HUS/Geometry/Target/SetTargetAngle    0. deg
+/HUS/Geometry/Target/SetBaseXYDim      1. cm
+/HUS/Geometry/Target/SetBaseZThick     36.70 nm
+/HUS/Geometry/Detector/SetDet0Angle    40. deg
+/HUS/Geometry/Detector/SetDet1Angle    70. deg
+/HUS/Geometry/Detector/SetDet2Angle    150. deg
+/HUS/Geometry/Detector/SetDet3Angle    233. deg
+/HUS/Geometry/Detector/SetDet4Angle    270 deg
+/HUS/Geometry/Detector/SetDet5Angle    330. deg
+
 # Initialize kernel
 #
 /run/geometryModified
