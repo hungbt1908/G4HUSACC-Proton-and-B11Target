@@ -4,6 +4,27 @@
 - This simulation included 2 main geometrical components:
   - Target and base layer: The target layer and base layer are placed in a parent block (physFrame). The target is made of B11 and has three side dimensions of 1cm x 1cm x 324.786 nm. The base material is made from C3H6O2 with 3-dimensional dimensions of 1cm x 1 cm x 36.70 nm.
   - 6 detectors: The detectors have three-sided dimensions of 10x10x0.3 cm3 and are made of Si material placed around the target with rotation angles of 40; 70; 150; 233; 270; 330 degrees.
+- The user needs to set up the geometry for the target block and 6 probes using the following commands placed before the /`run/initialize` command:
+  - Set size for target block:
+  ```c++
+  /HUS/Geometry/Target/SetTargetXYDim  1. cm
+  /HUS/Geometry/Target/SetTargetZThick 324.786 nm
+  /HUS/Geometry/Target/SetTargetAngle  0. deg
+  ```
+  - Set size for background layer:
+  ```c++
+  /HUS/Geometry/Target/SetBaseXYDim      1. cm
+  /HUS/Geometry/Target/SetBaseZThick     36.70 nm
+  ```
+  - Set the position of the 6 detectors according to the rotation angle:
+  ```c++
+  /HUS/Geometry/Detector/SetDet0Angle    40. deg
+  /HUS/Geometry/Detector/SetDet1Angle    70. deg
+  /HUS/Geometry/Detector/SetDet2Angle    150. deg
+  /HUS/Geometry/Detector/SetDet3Angle    233. deg
+  /HUS/Geometry/Detector/SetDet4Angle    270 deg
+  /HUS/Geometry/Detector/SetDet5Angle    330. deg
+  ```
 
 ### 2. Physics
 - In this application there are two main processes declared including EM and Hadron:
@@ -126,7 +147,9 @@
 - In the **secondaries0;1** branch is information about secondary alpha particles produced by the reaction of interacting protons in target B11. To plot the kinetic energy spectrum information and spatial position distribution of alpha particles, users can run the file **alphaPlot.c** in ROOT.
 
 # 🆕 Release notes:
-- **03/14/2024: released version 1.0 (this version)**
+- **03/14/2024: released version 1.0**
+- **03/15/2024: released version 1.1 (this version)**
+  - Add new DetectorMessenger class
 
 ---
 # 🔧 Requirements:
