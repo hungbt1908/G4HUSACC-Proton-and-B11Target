@@ -1,0 +1,25 @@
+# Change the default number of workers (in multi-threading mode) 
+#
+/run/numberOfThreads 4
+
+# Initialize kernel
+#
+/run/geometryModified
+/run/initialize
+
+# Setups proton beam
+#
+/HUS/Beam/SetBeamEnergy         2.0 MeV
+/HUS/Beam/SetBeamRadius         0.01 mm
+/HUS/Beam/SetBeamXPos           0. mm
+/HUS/Beam/SetBeamYPos           0. mm
+/HUS/Beam/SetBeamZPos           -1. cm
+/HUS/Beam/SetMinSolidAngle      0. deg
+/HUS/Beam/SetMaxSolidAngle      0.01 deg
+/HUS/Beam/SetThetaRotationAngle 0. deg
+/HUS/Beam/SetPhiRotationAngle   90. deg
+
+# Run
+#
+/run/printProgress 1
+/run/beamOn 10000000
